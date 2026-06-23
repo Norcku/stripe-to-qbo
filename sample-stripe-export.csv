@@ -1,0 +1,9 @@
+id,Description,Amount,Fee,Net,Created (UTC),Currency,Status
+ch_3Qa1B2C3D4E5F6G7H8,Monthly Subscription - Client A,$49.00,$1.72,$47.28,2026-06-01 10:30:00,usd,Succeeded
+ch_3Qa2C3D4E5F6G7H8I9,One-time Setup Fee - Client B,$199.00,$6.07,$192.93,2026-06-03 14:15:00,usd,Succeeded
+ch_3Qa3D4E5F6G7H8I9J0,Annual Plan - Client C,$299.00,$8.97,$290.03,2026-06-05 09:00:00,usd,Succeeded
+ch_3Qa4E5F6G7H8I9J0K1,Monthly Subscription - Client D,$49.00,$1.72,$47.28,2026-06-07 16:45:00,usd,Succeeded
+ch_3Qa5F6G7H8I9J0K1L2,Consulting - Client E,$150.00,$4.65,$145.35,2026-06-10 11:20:00,usd,Succeeded
+ch_3Qa6G7H8I9J0K1L2M3,Refund - Client B,-$199.00,$0.00,-$199.00,2026-06-12 08:30:00,usd,Succeeded
+ch_3Qa7H8I9J0K1L2M3N4,Monthly Subscription - Client A,$49.00,$1.72,$47.28,2026-06-15 13:10:00,usd,Succeeded
+ch_3Qa8I9J0K1L2M3N4O5,Setup Fee - Client F,$99.00,$3.17,$95.83,2026-06-18 10:00:00,usd,Succeeded

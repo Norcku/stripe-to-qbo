@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StripeToQBO — Convert Stripe CSV to QuickBooks in 10 Seconds</title>
+    <meta name="description" content="Stop wasting 3 hours per month manually formatting CSV files. Upload your Stripe CSV, download a QuickBooks-ready file instantly.">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --text: #1a1a2e;
+            --text-secondary: #4a4a6a;
+            --accent: #4d6bfe;
+            --accent-hover: #3b54e0;
+            --border: #e5e5e5;
+            --card-bg: #f9fafb;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+        /* Header */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 0; border-bottom: 1px solid var(--border);
+        }
+        header .logo { font-size: 1.25rem; font-weight: 700; color: var(--text); text-decoration: none; }
+        header .logo span { color: var(--accent); }
+        header nav a {
+            margin-left: 24px; text-decoration: none; color: var(--text-secondary);
+            font-weight: 500; font-size: 0.95rem;
+        }
+        header nav a:hover { color: var(--text); }
+        .btn { display: inline-block; padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 1rem; text-decoration: none; cursor: pointer; transition: all 0.2s; border: none; }
+        .btn-primary { background: var(--accent); color: #fff; }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn-outline { background: #fff; color: var(--accent); border: 2px solid var(--accent); }
+        .btn-outline:hover { background: #f0f2ff; }
+
+        /* Hero */
+        .hero { text-align: center; padding: 80px 0 60px; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.02em; }
+        .hero h1 span { color: var(--accent); }
+        .hero p { font-size: 1.2rem; color: var(--text-secondary); max-width: 500px; margin: 0 auto 32px; }
+        .hero .cta-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .hero .stat { display: inline-block; margin-top: 20px; padding: 8px 16px; background: #f0fdf4; color: #166534; border-radius: 20px; font-size: 0.9rem; font-weight: 500; }
+
+        /* How it works */
+        .how { padding: 80px 0; background: var(--card-bg); }
+        .how h2 { text-align: center; font-size: 2rem; margin-bottom: 48px; }
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
+        .step-card {
+            background: #fff; padding: 32px 24px; border-radius: var(--radius);
+            border: 1px solid var(--border); box-shadow: var(--shadow); text-align: center;
+        }
+        .step-card .num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 48px; height: 48px; background: var(--accent); color: #fff;
+            border-radius: 50%; font-size: 1.3rem; font-weight: 700; margin-bottom: 16px;
+        }
+        .step-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+        .step-card p { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* Pricing */
+        .pricing { padding: 80px 0; }
+        .pricing h2 { text-align: center; font-size: 2rem; margin-bottom: 48px; }
+        .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 700px; margin: 0 auto; }
+        .price-card {
+            background: #fff; padding: 40px 32px; border-radius: var(--radius);
+            border: 2px solid var(--border); text-align: center; transition: all 0.2s;
+        }
+        .price-card.featured { border-color: var(--accent); box-shadow: var(--shadow-md); position: relative; }
+        .price-card.featured::before {
+            content: 'Most Popular'; position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+            background: var(--accent); color: #fff; padding: 4px 16px; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 600;
+        }
+        .price-card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+        .price-card .price { font-size: 2.5rem; font-weight: 800; margin: 16px 0 4px; }
+        .price-card .price small { font-size: 0.9rem; color: var(--text-secondary); font-weight: 400; }
+        .price-card ul { list-style: none; text-align: left; margin: 24px 0; }
+        .price-card ul li { padding: 6px 0; font-size: 0.95rem; color: var(--text-secondary); }
+        .price-card ul li::before { content: '✓ '; color: var(--accent); font-weight: 700; }
+
+        /* FAQ */
+        .faq { padding: 80px 0; background: var(--card-bg); }
+        .faq h2 { text-align: center; font-size: 2rem; margin-bottom: 48px; }
+        .faq-item { max-width: 700px; margin: 0 auto 24px; }
+        .faq-item h3 { font-size: 1.05rem; margin-bottom: 6px; cursor: pointer; }
+        .faq-item p { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* CTA bottom */
+        .cta-bottom { text-align: center; padding: 80px 0; }
+        .cta-bottom h2 { font-size: 2rem; margin-bottom: 16px; }
+        .cta-bottom p { color: var(--text-secondary); margin-bottom: 24px; font-size: 1.1rem; }
+
+        /* Footer */
+        footer { text-align: center; padding: 32px 0; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            header nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <a href="#" class="logo">Stripe<span>ToQBO</span></a>
+            <nav>
+                <a href="#how">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#faq">FAQ</a>
+            </nav>
+        </header>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <h1>Stripe CSV → <span>QuickBooks</span><br>in 10 seconds</h1>
+            <p>Stop wasting 3 hours per month manually formatting CSV files. Upload. Convert. Done.</p>
+            <div class="cta-group">
+                <a href="https://YOUR_STREAMLIT_URL_HERE" class="btn btn-primary" style="font-size:1.1rem; padding:14px 36px;">🔄 Try It Free</a>
+                <a href="#pricing" class="btn btn-outline" style="font-size:1.1rem; padding:14px 36px;">See Plans</a>
+            </div>
+            <div class="stat">✅ Trusted by bookkeepers saving 3+ hours per month</div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how" id="how">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps">
+                <div class="step-card">
+                    <div class="num">1</div>
+                    <h3>Upload Stripe CSV</h3>
+                    <p>Export your payments from Stripe Dashboard. Upload the CSV file — no account connection needed.</p>
+                </div>
+                <div class="step-card">
+                    <div class="num">2</div>
+                    <h3>Auto-Convert</h3>
+                    <p>We automatically split fees from revenue, fix date formats, and format everything for QuickBooks.</p>
+                </div>
+                <div class="step-card">
+                    <div class="num">3</div>
+                    <h3>Download & Import</h3>
+                    <p>Download the QBO-ready file. Import into QuickBooks in one click. Done.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2>Simple, Flat Pricing</h2>
+            <div class="pricing-cards">
+                <div class="price-card">
+                    <h3>Solo</h3>
+                    <div class="price">$15<small>/month</small></div>
+                    <ul>
+                        <li>50 conversions per month</li>
+                        <li>Files up to 5 MB</li>
+                        <li>Instant processing</li>
+                        <li>Files deleted after conversion</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="https://buy.stripe.com/PASTE_SOLO_LINK" class="btn btn-outline" style="width:100%;">Get Started</a>
+                </div>
+                <div class="price-card featured">
+                    <h3>Pro</h3>
+                    <div class="price">$29<small>/month</small></div>
+                    <ul>
+                        <li>Unlimited conversions</li>
+                        <li>Files up to 25 MB</li>
+                        <li>Instant processing</li>
+                        <li>Priority email support</li>
+                        <li>Early access to new features</li>
+                    </ul>
+                    <a href="https://buy.stripe.com/PASTE_PRO_LINK" class="btn btn-primary" style="width:100%;">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h3>Does this connect to my Stripe account?</h3>
+                <p>No. You export a CSV file from your Stripe dashboard and upload it here. No OAuth, no permissions, no security risk. Your data never touches a database — files are processed in memory and deleted immediately.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Does it work with QuickBooks Desktop or only Online?</h3>
+                <p>Currently optimized for QuickBooks Online CSV import. QuickBooks Desktop users can import the same file via the IIF/CSV import feature — contact support if you need a custom format.</p>
+            </div>
+            <div class="faq-item">
+                <h3>What about refunds and disputes?</h3>
+                <p>Refunds in your Stripe export appear as negative amounts. We include them in the conversion as negative revenue entries. Disputes and chargebacks are also handled — they show up as separate fee line items.</p>
+            </div>
+            <div class="faq-item">
+                <h3>Is my data safe?</h3>
+                <p>Files are processed entirely in memory and never stored on disk or in a database. After conversion, the file is discarded. We don't keep copies, backups, or logs of your financial data.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-bottom">
+        <div class="container">
+            <h2>Ready to stop wrestling with CSV files?</h2>
+            <p>First conversion is free. No credit card required.</p>
+            <a href="https://YOUR_STREAMLIT_URL_HERE" class="btn btn-primary" style="font-size:1.1rem; padding:14px 40px;">⚡ Try It Free Now</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2026 StripeToQBO. Not affiliated with Stripe, Inc. or Intuit, Inc.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
