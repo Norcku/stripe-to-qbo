@@ -7,6 +7,7 @@ import streamlit as st
 import pandas as pd
 import io
 import re
+import hashlib
 from datetime import datetime
 
 # ─── KONFIGURACJA STRONY ───────────────────────────────────────────
@@ -16,18 +17,26 @@ st.set_page_config(
     layout="centered",
 )
 
-# ─── KONTROLA DOSTĘPU (opcjonalna, przez Streamlit secrets) ────────
-# Jeśli chcesz zablokować dostęp kodem — ustaw ACCESS_CODE w secrets.toml
-# Jeśli nie ustawisz — aplikacja jest otwarta dla wszystkich.
+# ─── FUNKCJA POBIERAJĄCA IP UŻYTKOWNIKA ────────────────────────────
+def get_client_ip():
+    """Pobiera adres IP klienta ze Streamlit."""
+    from streamlit.runtime.scriptrunner import get_script_run_ctx
+    ctx = get_script_run_ctx()
+    if ctx and hasattr(ctx, 'session_info') and ctx.session_info:
+        return ctx.session_info.get('client_ip', 'unknown')
+    return 'unknown'
 
+# ─── KONTROLA DOSTĘPU ──────────────────────────────────────────────
 if "access_granted" not in st.session_state:
     st.session_state.access_granted = False
-
-if "free_used" not in st.session_state:
-    st.session_state.free_used = False
+if "used_ips" not in st.session_state:
+    st.session_state.used_ips = set()
+if "free_used_this_session" not in st.session_state:
+    st.session_state.free_used_this_session = False
 
 ACCESS_CODE = st.secrets.get("ACCESS_CODE", None)
 
+# Tryb z kodem dostępu (jeśli ustawiony)
 if ACCESS_CODE and not st.session_state.access_granted:
     st.title("🔒 StripeToQBO")
     st.markdown("### Wprowadź kod dostępu, aby korzystać z narzędzia.")
@@ -39,6 +48,22 @@ if ACCESS_CODE and not st.session_state.access_granted:
         else:
             st.error("Nieprawidłowy kod. Kup dostęp na stronie produktu.")
     st.stop()
+
+# Tryb darmowy – jeden raz na IP
+if not st.session_state.access_granted:
+    client_ip = get_client_ip()
+
+    if client_ip not in st.session_state.used_ips and not st.session_state.free_used_this_session:
+        st.info("💡 **1 darmowa konwersja** — wypróbuj za darmo. Pełny dostęp: 59 zł / miesiąc.")
+    elif st.session_state.free_used_this_session:
+        # Użytkownik już skorzystał w tej sesji
+        pass  # komunikat pojawi się po konwersji
+    else:
+        st.warning("⚠️ Wykorzystałeś już darmową konwersję na tym urządzeniu.")
+        st.markdown("### 💳 Kup pełny dostęp")
+        st.link_button("🛒 Kup Plan Solo — 59 zł / miesiąc", "https://buy.stripe.com/test_3cI3cudQkeHu0IJgeQ3ZK00")
+        st.link_button("🛒 Kup Plan Pro — 119 zł / miesiąc", "https://buy.stripe.com/test_3cI9ASbIcczmezz2o03ZK01")
+        st.stop()
 
 # ─── FUNKCJE POMOCNICZE ────────────────────────────────────────────
 
@@ -179,15 +204,6 @@ def convert_stripe_to_qbo(df: pd.DataFrame) -> pd.DataFrame:
 st.title("🔄 StripeToQBO")
 st.caption("Konwertuj plik CSV ze Stripe do formatu QuickBooks Online w 10 sekund.")
 
-# --- Tryb darmowy (1 konwersja za darmo) ---
-if not st.session_state.access_granted and not st.session_state.free_used:
-    st.info("💡 **1 darmowa konwersja** — wypróbuj za darmo. Pełny dostęp: 59 zł / miesiąc.")
-    user_email = st.text_input("Twój email (do jednorazowej darmowej konwersji)", placeholder="ja@example.com")
-else:
-    user_email = None
-
-st.divider()
-
 # --- Upload pliku ---
 uploaded_file = st.file_uploader(
     "📂 Wrzuć plik CSV wyeksportowany ze Stripe",
@@ -248,10 +264,13 @@ if uploaded_file is not None:
             5. W razie potrzeby przypisz konta księgowe (Income do przychodów, Fees do kosztów).
             """)
 
-        # Free trial — oznacz jako użyty
-        if not st.session_state.access_granted and not st.session_state.free_used:
-            st.session_state.free_used = True
-            st.warning("⚠️ To była Twoja jedyna darmowa konwersja. Kup pełny dostęp za 59 zł / miesiąc.")
+        # Free trial — oznacz IP jako użyty
+        if not st.session_state.access_granted and not st.session_state.free_used_this_session:
+            client_ip = get_client_ip()
+            st.session_state.used_ips.add(client_ip)
+            st.session_state.free_used_this_session = True
+            st.warning("⚠️ To była Twoja jedyna darmowa konwersja na tym urządzeniu. Kup pełny dostęp za 59 zł / miesiąc.")
+            st.link_button("🛒 Kup Plan Solo — 59 zł / miesiąc", "https://buy.stripe.com/test_3cI3cudQkeHu0IJgeQ3ZK00")
 
 # --- Sekcja: Kup dostęp ---
 if not st.session_state.access_granted:
@@ -266,7 +285,7 @@ if not st.session_state.access_granted:
         ✅ Obsługa plików do 5 MB  
         ✅ Pliki usuwane natychmiast po konwersji  
         """)
-        st.link_button("🛒 Kup Plan Solo", "https://buy.stripe.com/PASTE_YOUR_LINK_HERE", type="primary")
+        st.link_button("🛒 Kup Plan Solo", "https://buy.stripe.com/test_3cI3cudQkeHu0IJgeQ3ZK00", type="primary")
     with col2:
         st.markdown("""
         **Plan Pro — 119 zł / miesiąc**  
@@ -274,7 +293,7 @@ if not st.session_state.access_granted:
         ✅ Obsługa plików do 25 MB  
         ✅ Priorytetowe wsparcie email  
         """)
-        st.link_button("🛒 Kup Plan Pro", "https://buy.stripe.com/PASTE_YOUR_LINK_HERE")
+        st.link_button("🛒 Kup Plan Pro", "https://buy.stripe.com/test_3cI9ASbIcczmezz2o03ZK01")
 
 st.divider()
 st.caption("🔒 Twoje dane są bezpieczne. Pliki są usuwane natychmiast po konwersji. Nie przechowujemy ich na serwerze.")
