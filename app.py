@@ -45,8 +45,8 @@ if ACCESS_CODE and not st.session_state.access_granted:
 if not st.session_state.access_granted and st.session_state.free_used:
     st.warning("⚠️ You've already used your free conversion on this device.")
     st.markdown("### 💳 Get Full Access")
-    st.link_button("🛒 Buy Solo Plan — $15/month", "https://buy.stripe.com/test_3cI3cudQkeHu0IJgeQ3ZK00")
-    st.link_button("🛒 Buy Pro Plan — $29/month", "https://buy.stripe.com/test_3cI9ASbIcczmezz2o03ZK01")
+    st.link_button("🛒 Buy Solo Plan — $15/month", "https://buy.stripe.com/4gM28q3bGgPC6335Ac3ZK03")
+    st.link_button("🛒 Buy Pro Plan — $29/month", "https://buy.stripe.com/28EdR8bIc9na1MNfaM3ZK04")
     st.stop()
 
 # ─── HELPER FUNCTIONS ──────────────────────────────────────────────
@@ -217,7 +217,7 @@ if uploaded_file is not None:
             cookie_manager.set("stripe_to_qbo_free_used", "true", expires_at=datetime(2036, 12, 31))
             st.session_state.free_used = True
             st.warning("⚠️ That was your only free conversion on this device. Full access is $15/month.")
-            st.link_button("🛒 Buy Solo Plan — $15/month", "https://buy.stripe.com/test_3cI3cudQkeHu0IJgeQ3ZK00")
+            st.link_button("🛒 Buy Solo Plan — $15/month", "https://buy.stripe.com/4gM28q3bGgPC6335Ac3ZK03")
 
 # --- Pricing section ---
 if not st.session_state.access_granted:
@@ -232,7 +232,7 @@ if not st.session_state.access_granted:
         ✅ Files up to 5 MB  
         ✅ Files deleted immediately after conversion  
         """)
-        st.link_button("🛒 Buy Solo Plan", "https://buy.stripe.com/test_3cI3cudQkeHu0IJgeQ3ZK00", type="primary")
+        st.link_button("🛒 Buy Solo Plan", "https://buy.stripe.com/4gM28q3bGgPC6335Ac3ZK03", type="primary")
     with col2:
         st.markdown("""
         **Pro Plan — $29/month**  
@@ -240,7 +240,7 @@ if not st.session_state.access_granted:
         ✅ Files up to 25 MB  
         ✅ Priority email support  
         """)
-        st.link_button("🛒 Buy Pro Plan", "https://buy.stripe.com/test_3cI9ASbIcczmezz2o03ZK01")
+        st.link_button("🛒 Buy Pro Plan", "https://buy.stripe.com/28EdR8bIc9na1MNfaM3ZK04")
 
 st.divider()
 st.caption("🔒 Your data is safe. Files are processed in memory and deleted immediately. Nothing is stored on our servers.")
