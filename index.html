@@ -28,7 +28,6 @@
         }
         .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
 
-        /* Header */
         header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 20px 0; border-bottom: 1px solid var(--border);
@@ -46,7 +45,6 @@
         .btn-outline { background: #fff; color: var(--accent); border: 2px solid var(--accent); }
         .btn-outline:hover { background: #f0f2ff; }
 
-        /* Hero */
         .hero { text-align: center; padding: 80px 0 60px; }
         .hero h1 { font-size: 2.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; letter-spacing: -0.02em; }
         .hero h1 span { color: var(--accent); }
@@ -54,7 +52,6 @@
         .hero .cta-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
         .hero .stat { display: inline-block; margin-top: 20px; padding: 8px 16px; background: #f0fdf4; color: #166534; border-radius: 20px; font-size: 0.9rem; font-weight: 500; }
 
-        /* How it works */
         .how { padding: 80px 0; background: var(--card-bg); }
         .how h2 { text-align: center; font-size: 2rem; margin-bottom: 48px; }
         .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
@@ -70,7 +67,6 @@
         .step-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
         .step-card p { color: var(--text-secondary); font-size: 0.95rem; }
 
-        /* Pricing */
         .pricing { padding: 80px 0; }
         .pricing h2 { text-align: center; font-size: 2rem; margin-bottom: 48px; }
         .pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 700px; margin: 0 auto; }
@@ -91,22 +87,18 @@
         .price-card ul li { padding: 6px 0; font-size: 0.95rem; color: var(--text-secondary); }
         .price-card ul li::before { content: '✓ '; color: var(--accent); font-weight: 700; }
 
-        /* FAQ */
         .faq { padding: 80px 0; background: var(--card-bg); }
         .faq h2 { text-align: center; font-size: 2rem; margin-bottom: 48px; }
         .faq-item { max-width: 700px; margin: 0 auto 24px; }
         .faq-item h3 { font-size: 1.05rem; margin-bottom: 6px; cursor: pointer; }
         .faq-item p { color: var(--text-secondary); font-size: 0.95rem; }
 
-        /* CTA bottom */
         .cta-bottom { text-align: center; padding: 80px 0; }
         .cta-bottom h2 { font-size: 2rem; margin-bottom: 16px; }
         .cta-bottom p { color: var(--text-secondary); margin-bottom: 24px; font-size: 1.1rem; }
 
-        /* Footer */
         footer { text-align: center; padding: 32px 0; border-top: 1px solid var(--border); color: var(--text-secondary); font-size: 0.9rem; }
 
-        /* Mobile */
         @media (max-width: 640px) {
             .hero h1 { font-size: 2rem; }
             .hero p { font-size: 1rem; }
@@ -127,20 +119,18 @@
         </header>
     </div>
 
-    <!-- Hero -->
     <section class="hero">
         <div class="container">
             <h1>Stripe CSV → <span>QuickBooks</span><br>in 10 seconds</h1>
             <p>Stop wasting 3 hours per month manually formatting CSV files. Upload. Convert. Done.</p>
             <div class="cta-group">
-                <a href="https://YOUR_STREAMLIT_URL_HERE" class="btn btn-primary" style="font-size:1.1rem; padding:14px 36px;">🔄 Try It Free</a>
+                <a href="https://stripetoqbo.streamlit.app" class="btn btn-primary" style="font-size:1.1rem; padding:14px 36px;">🔄 Try It Free</a>
                 <a href="#pricing" class="btn btn-outline" style="font-size:1.1rem; padding:14px 36px;">See Plans</a>
             </div>
             <div class="stat">✅ Trusted by bookkeepers saving 3+ hours per month</div>
         </div>
     </section>
 
-    <!-- How It Works -->
     <section class="how" id="how">
         <div class="container">
             <h2>How It Works</h2>
@@ -164,7 +154,6 @@
         </div>
     </section>
 
-    <!-- Pricing -->
     <section class="pricing" id="pricing">
         <div class="container">
             <h2>Simple, Flat Pricing</h2>
@@ -179,7 +168,7 @@
                         <li>Files deleted after conversion</li>
                         <li>Email support</li>
                     </ul>
-                    <a href="https://buy.stripe.com/PASTE_SOLO_LINK" class="btn btn-outline" style="width:100%;">Get Started</a>
+                    <a href="https://buy.stripe.com/4gM28q3bGgPC6335Ac3ZK03" class="btn btn-outline" style="width:100%;">Get Started</a>
                 </div>
                 <div class="price-card featured">
                     <h3>Pro</h3>
@@ -191,13 +180,12 @@
                         <li>Priority email support</li>
                         <li>Early access to new features</li>
                     </ul>
-                    <a href="https://buy.stripe.com/PASTE_PRO_LINK" class="btn btn-primary" style="width:100%;">Get Started</a>
+                    <a href="https://buy.stripe.com/28EdR8bIc9na1MNfaM3ZK04" class="btn btn-primary" style="width:100%;">Get Started</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ -->
     <section class="faq" id="faq">
         <div class="container">
             <h2>Frequently Asked Questions</h2>
@@ -220,16 +208,14 @@
         </div>
     </section>
 
-    <!-- CTA -->
     <section class="cta-bottom">
         <div class="container">
             <h2>Ready to stop wrestling with CSV files?</h2>
             <p>First conversion is free. No credit card required.</p>
-            <a href="https://YOUR_STREAMLIT_URL_HERE" class="btn btn-primary" style="font-size:1.1rem; padding:14px 40px;">⚡ Try It Free Now</a>
+            <a href="https://stripetoqbo.streamlit.app" class="btn btn-primary" style="font-size:1.1rem; padding:14px 40px;">⚡ Try It Free Now</a>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <p>© 2026 StripeToQBO. Not affiliated with Stripe, Inc. or Intuit, Inc.</p>
